@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.lp.dao.LpChamberOfCommerceDao">
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        id,        remarks,        version_no,        create_by,        create_time,        update_by,        update_time,        delete_flag,        sort,        name,        sys_user_id,        category,        grade,        standing_director_size,        director_size,        member_size,        vice_chairman_size,        secretary_size,        phone,        special_plane,        e_mail,        postcode,        credit_code,        website,        established_time,        group_administrative_region,        group_fox,        legal_person,        chairman_name,        president_name,        secretary_general_name,        contact,        personal_call,        address,        introduce    </sql>
+    <!--基本过滤条件-->
+    <sql id="filterColumns">
+            <if test="id != null and id != ''">
+                AND id=#{ id }
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks=#{ remarks }
+            </if>
+            <if test="versionNo != null and versionNo != ''">
+                AND version_no=#{ versionNo }
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{ createBy }
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND create_time=#{ createTime }
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by=#{ updateBy }
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                AND update_time=#{ updateTime }
+            </if>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                AND delete_flag=#{ deleteFlag }
+            </if>
+            <if test="sort != null and sort != ''">
+                AND sort=#{ sort }
+            </if>
+            <if test="name != null and name != ''">
+                AND name=#{ name }
+            </if>
+            <if test="sysUserId != null and sysUserId != ''">
+                AND sys_user_id=#{ sysUserId }
+            </if>
+            <if test="category != null and category != ''">
+                AND category=#{ category }
+            </if>
+            <if test="grade != null and grade != ''">
+                AND grade=#{ grade }
+            </if>
+            <if test="standingDirectorSize != null and standingDirectorSize != ''">
+                AND standing_director_size=#{ standingDirectorSize }
+            </if>
+            <if test="directorSize != null and directorSize != ''">
+                AND director_size=#{ directorSize }
+            </if>
+            <if test="memberSize != null and memberSize != ''">
+                AND member_size=#{ memberSize }
+            </if>
+            <if test="viceChairmanSize != null and viceChairmanSize != ''">
+                AND vice_chairman_size=#{ viceChairmanSize }
+            </if>
+            <if test="secretarySize != null and secretarySize != ''">
+                AND secretary_size=#{ secretarySize }
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone=#{ phone }
+            </if>
+            <if test="specialPlane != null and specialPlane != ''">
+                AND special_plane=#{ specialPlane }
+            </if>
+            <if test="eMail != null and eMail != ''">
+                AND e_mail=#{ eMail }
+            </if>
+            <if test="postcode != null and postcode != ''">
+                AND postcode=#{ postcode }
+            </if>
+            <if test="creditCode != null and creditCode != ''">
+                AND credit_code=#{ creditCode }
+            </if>
+            <if test="website != null and website != ''">
+                AND website=#{ website }
+            </if>
+            <if test="establishedTime != null and establishedTime != ''">
+                AND established_time=#{ establishedTime }
+            </if>
+            <if test="groupAdministrativeRegion != null and groupAdministrativeRegion != ''">
+                AND group_administrative_region=#{ groupAdministrativeRegion }
+            </if>
+            <if test="groupFox != null and groupFox != ''">
+                AND group_fox=#{ groupFox }
+            </if>
+            <if test="legalPerson != null and legalPerson != ''">
+                AND legal_person=#{ legalPerson }
+            </if>
+            <if test="chairmanName != null and chairmanName != ''">
+                AND chairman_name=#{ chairmanName }
+            </if>
+            <if test="presidentName != null and presidentName != ''">
+                AND president_name=#{ presidentName }
+            </if>
+            <if test="secretaryGeneralName != null and secretaryGeneralName != ''">
+                AND secretary_general_name=#{ secretaryGeneralName }
+            </if>
+            <if test="contact != null and contact != ''">
+                AND contact=#{ contact }
+            </if>
+            <if test="personalCall != null and personalCall != ''">
+                AND personal_call=#{ personalCall }
+            </if>
+            <if test="address != null and address != ''">
+                AND address=#{ address }
+            </if>
+            <if test="introduce != null and introduce != ''">
+                AND introduce=#{ introduce }
+            </if>
+    </sql>
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.lp.entity.LpChamberOfCommerceEntity" id="lpChamberOfCommerceMap">
+            <result property="id" column="id"/>
+            <result property="remarks" column="remarks"/>
+            <result property="versionNo" column="version_no"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="deleteFlag" column="delete_flag"/>
+            <result property="sort" column="sort"/>
+            <result property="name" column="name"/>
+            <result property="sysUserId" column="sys_user_id"/>
+            <result property="category" column="category"/>
+            <result property="grade" column="grade"/>
+            <result property="standingDirectorSize" column="standing_director_size"/>
+            <result property="directorSize" column="director_size"/>
+            <result property="memberSize" column="member_size"/>
+            <result property="viceChairmanSize" column="vice_chairman_size"/>
+            <result property="secretarySize" column="secretary_size"/>
+            <result property="phone" column="phone"/>
+            <result property="specialPlane" column="special_plane"/>
+            <result property="eMail" column="e_mail"/>
+            <result property="postcode" column="postcode"/>
+            <result property="creditCode" column="credit_code"/>
+            <result property="website" column="website"/>
+            <result property="establishedTime" column="established_time"/>
+            <result property="groupAdministrativeRegion" column="group_administrative_region"/>
+            <result property="groupFox" column="group_fox"/>
+            <result property="legalPerson" column="legal_person"/>
+            <result property="chairmanName" column="chairman_name"/>
+            <result property="presidentName" column="president_name"/>
+            <result property="secretaryGeneralName" column="secretary_general_name"/>
+            <result property="contact" column="contact"/>
+            <result property="personalCall" column="personal_call"/>
+            <result property="address" column="address"/>
+            <result property="introduce" column="introduce"/>
+    </resultMap>
+
+
+
+</mapper>

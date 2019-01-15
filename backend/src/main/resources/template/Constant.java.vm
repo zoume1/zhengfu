@@ -1,0 +1,22 @@
+package ${package}.${moduleName}.constant;
+
+/**
+ * ${comments}常量
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface  ${className}Constant{
+    #foreach ($column in $columns)
+        #if($column.list.size()>0)
+    /**
+     * ${column.comments} - ${column.selectKey}
+     */
+    #foreach ($list in $column.list)
+    //${list.MapValue}
+    String ${column.selectKey.toUpperCase()}_${list.MapKey} = "${list.MapKey}";
+    #end
+        #end
+    #end
+}

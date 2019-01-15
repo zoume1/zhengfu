@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.lp.dao.LpActivityDao">
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        id,        remarks,        version_no,        create_by,        create_time,        update_by,        update_time,        delete_flag,        sort,        name,        state,        pageview,        apply_size,        apply_start_time,        apply_end_time,        audit_state,        user_id,        activity_time,        address,        content    </sql>
+    <!--基本过滤条件-->
+    <sql id="filterColumns">
+            <if test="id != null and id != ''">
+                AND id=#{ id }
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks=#{ remarks }
+            </if>
+            <if test="versionNo != null and versionNo != ''">
+                AND version_no=#{ versionNo }
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{ createBy }
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND create_time=#{ createTime }
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by=#{ updateBy }
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                AND update_time=#{ updateTime }
+            </if>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                AND delete_flag=#{ deleteFlag }
+            </if>
+            <if test="sort != null and sort != ''">
+                AND sort=#{ sort }
+            </if>
+            <if test="name != null and name != ''">
+                AND name=#{ name }
+            </if>
+            <if test="state != null and state != ''">
+                AND state=#{ state }
+            </if>
+            <if test="pageview != null and pageview != ''">
+                AND pageview=#{ pageview }
+            </if>
+            <if test="applySize != null and applySize != ''">
+                AND apply_size=#{ applySize }
+            </if>
+            <if test="applyStartTime != null and applyStartTime != ''">
+                AND apply_start_time=#{ applyStartTime }
+            </if>
+            <if test="applyEndTime != null and applyEndTime != ''">
+                AND apply_end_time=#{ applyEndTime }
+            </if>
+            <if test="auditState != null and auditState != ''">
+                AND audit_state=#{ auditState }
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id=#{ userId }
+            </if>
+            <if test="activityTime != null and activityTime != ''">
+                AND activity_time=#{ activityTime }
+            </if>
+            <if test="address != null and address != ''">
+                AND address=#{ address }
+            </if>
+            <if test="content != null and content != ''">
+                AND content=#{ content }
+            </if>
+    </sql>
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.lp.entity.LpActivityEntity" id="lpActivityMap">
+            <result property="id" column="id"/>
+            <result property="remarks" column="remarks"/>
+            <result property="versionNo" column="version_no"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="deleteFlag" column="delete_flag"/>
+            <result property="sort" column="sort"/>
+            <result property="name" column="name"/>
+            <result property="state" column="state"/>
+            <result property="pageview" column="pageview"/>
+            <result property="applySize" column="apply_size"/>
+            <result property="applyStartTime" column="apply_start_time"/>
+            <result property="applyEndTime" column="apply_end_time"/>
+            <result property="auditState" column="audit_state"/>
+            <result property="userId" column="user_id"/>
+            <result property="activityTime" column="activity_time"/>
+            <result property="address" column="address"/>
+            <result property="content" column="content"/>
+    </resultMap>
+
+
+
+</mapper>

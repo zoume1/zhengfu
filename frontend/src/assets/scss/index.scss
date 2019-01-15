@@ -1,0 +1,106 @@
+@import "normalize";  // api: https://github.com/necolas/normalize.css/
+@import "base";
+
+//邮箱
+.mail_tab .el-tabs .el-tabs__header{
+  position: relative !important;
+  top:0;
+  left:0;
+  padding:0;
+  margin:0;
+  z-index: 1;
+}
+
+.mail_tab .el-tabs__item{
+  width: 33.3%;
+  text-align: center;
+  background: #3497DB;
+  color: #fff;
+  border:none;
+}
+
+.mail_tab .el-tabs--card>.el-tabs__header .el-tabs__item.is-active{
+  background:#2A7AB1;
+  border: none;
+}
+
+.mail_tab  .el-tabs--card>.el-tabs__header .el-tabs__nav{
+  width: 100%;
+  border:none;
+}
+
+.mail_tab .el-tabs__content{
+  background: #F5F9FB;
+  padding:15px !important;
+  min-height: 441px;
+}
+
+.mail_recent .el-checkbox .el-checkbox__input{
+  float:right;
+}
+
+.mail_recent .demo-input-suffix .el-input input{
+  border-radius:30px;
+}
+
+//个人办公,任务指派
+.assign_cont .el-tabs .el-tabs__header{
+  position: relative !important;
+  top:0;
+  left:0;
+  padding:0;
+  margin:0;
+  z-index: 1;
+  box-shadow: none;
+}
+
+.assign_cont .el-tabs__item:hover{
+  background:#3E8EF7;
+  color:#fff;
+}
+
+.assign_cont .el-tabs__item.is-active{
+  background:#3E8EF7;
+  color:#fff;
+  border: none;
+}
+
+.assign_received .el-tabs .el-tabs__header{
+  position: relative !important;
+  top:0;
+  left:0;
+  padding:0;
+  margin:0;
+  z-index: 1;
+  box-shadow: none;
+  border-bottom: none;
+  margin-top: 20px;
+}
+
+.assign_received .el-tabs--card>.el-tabs__header .el-tabs__nav{
+  border-bottom: 2px solid #3E8EF7;
+  border:2px solid #3E8EF7;
+  border-radius: 4px;
+}
+
+.assign_received .el-tabs--card>.el-tabs__header .el-tabs__item{
+  border-left: 2px solid #3E8EF7;
+  border-bottom: none;
+}
+
+.assign_received .el-tabs--card>.el-tabs__header .el-tabs__item:first-child{
+  border-left:none;
+}
+
+.el-date-editor .el-range-separator{
+  padding:0;
+}
+
+//任务指派
+.assignment .el-card__body{
+  padding:0;
+}
+
+.site-content--tabs > .el-tabs .el-pagination{
+  text-align: center;
+}

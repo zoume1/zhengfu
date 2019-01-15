@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.lp.dao.LpUserDao">
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        id,        remarks,        version_no,        create_by,        create_time,        update_by,        update_time,        delete_flag,        sort,        user_name,        name,        grade,        state    </sql>
+    <!--基本过滤条件-->
+    <sql id="filterColumns">
+            <if test="id != null and id != ''">
+                AND id=#{ id }
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks=#{ remarks }
+            </if>
+            <if test="versionNo != null and versionNo != ''">
+                AND version_no=#{ versionNo }
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{ createBy }
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND create_time=#{ createTime }
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by=#{ updateBy }
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                AND update_time=#{ updateTime }
+            </if>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                AND delete_flag=#{ deleteFlag }
+            </if>
+            <if test="sort != null and sort != ''">
+                AND sort=#{ sort }
+            </if>
+            <if test="userName != null and userName != ''">
+                AND user_name=#{ userName }
+            </if>
+            <if test="name != null and name != ''">
+                AND name=#{ name }
+            </if>
+            <if test="grade != null and grade != ''">
+                AND grade=#{ grade }
+            </if>
+            <if test="state != null and state != ''">
+                AND state=#{ state }
+            </if>
+    </sql>
+    <select id="sumStatistics"  resultType="java.util.Map">
+        select '个人会员' userType,c.conf_name name,count(u.id) count from generator_bus_config c
+        left join lp_user u on c.conf_vue=u.grade and u.user_type='0'
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+        where c.conf_code='lp_user_grade'
+        group by c.conf_vue
+        UNION
+        select '企业会员' userType,c.conf_name name,count(u.id) count from generator_bus_config c
+        left join lp_user u on c.conf_vue=u.industry_type and u.user_type='1'
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+         where c.conf_code='lp_user_industry_type'
+         group by c.conf_vue
+          UNION
+          select '团体会员' userType,c.conf_name name,count(u.id) count from generator_bus_config c
+           left join lp_user u on c.conf_vue=u.group_category and u.user_type='2'
+            <if test="coceralId != null and coceralId != ''">
+                AND u.coceral_id=#{ coceralId }
+            </if>
+            where c.conf_code='lp_user_group_category'
+            group by c.conf_vue
+    </select>
+    <select id="enterpriseAreaStatistics" resultType="java.util.Map">
+        select c.conf_name name,count(u.id) count from generator_bus_config c
+         left join lp_user u on c.conf_vue=u.classification_of_industry and u.user_type='1'
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+          where c.conf_code='lp_user_classification_of_industry'
+
+          group by c.conf_vue
+    </select>
+    <select id="corporateMemberStatistics" resultType="java.util.Map">
+         select c.conf_name name,count(u.id) count from generator_bus_config c
+         left join lp_user u on c.conf_vue=u.industry_type and u.user_type='1'
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+         where c.conf_code='lp_user_industry_type'
+
+         group by c.conf_vue
+    </select>
+    <select id="teamMembersStatistics" resultType="java.util.Map">
+        select c.conf_name name,count(u.id) count from generator_bus_config c
+        left join lp_user u on c.conf_vue=u.group_category and u.user_type='2'
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+        where c.conf_code='lp_user_group_category'
+
+         group by c.conf_vue
+    </select>
+    <select id="individualMembershipStatistics" resultType="java.util.Map">
+        select c.conf_name name,count(u.id) count from generator_bus_config c
+        left join lp_user u on c.conf_vue=u.grade and u.user_type='0'
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+        where c.conf_code='lp_user_grade'
+
+        group by c.conf_vue
+    </select>
+    <select id="enterpriseAreaReportForms" resultType="java.util.Map" parameterType="java.util.List">
+        select b.name,
+        count(a.id) count,
+        <foreach collection="list"  item="item" separator=",">
+            sum(case when a.classification_of_industry=#{item.confVue} then 1 else 0 end)as lp_user_classification_of_industry${item.confVue}
+        </foreach>
+        from lp_chamber_of_commerce b
+        left join  lp_user a on a.coceral_id=b.id and a.user_type='1'
+        <if test="coceralId != null and coceralId != ''">
+            AND a.coceral_id=#{ coceralId }
+        </if>
+        group by b.id,b.name
+    </select>
+    <select id="corporateMemberReportForms" resultType="java.util.Map">
+        select b.name,
+        count(a.id) count,
+        <foreach collection="list"  item="item" separator=",">
+            sum(case when a.industry_type=#{item.confVue} then 1 else 0 end)as lp_user_industry_type${item.confVue}
+        </foreach>
+        from lp_chamber_of_commerce b
+        left join  lp_user a on a.coceral_id=b.id and a.user_type='1'
+        <if test="coceralId != null and coceralId != ''">
+            AND a.coceral_id=#{ coceralId }
+        </if>
+        group by b.id,b.name
+    </select>
+    <select id="teamMembersReportForms" resultType="java.util.Map">
+        select b.name,
+        count(a.id) count,
+        <foreach collection="list"  item="item" separator=",">
+            sum(case when a.group_category=#{item.confVue} then 1 else 0 end)as lp_user_group_category${item.confVue}
+        </foreach>
+        from lp_chamber_of_commerce b
+        left join  lp_user a on a.coceral_id=b.id and a.user_type='2'
+        <if test="coceralId != null and coceralId != ''">
+            AND a.coceral_id=#{ coceralId }
+        </if>
+        group by b.id,b.name
+    </select>
+    <select id="individualMembershipReportForms" resultType="java.util.Map">
+        select b.name,
+        count(a.id) count,
+        <foreach collection="list"  item="item" separator=",">
+            sum(case when a.grade=#{item.confVue} then 1 else 0 end)as lp_user_grade${item.confVue}
+        </foreach>
+        from lp_chamber_of_commerce b
+        left join  lp_user a on a.coceral_id=b.id and a.user_type='0'
+        <if test="coceralId != null and coceralId != ''">
+            AND a.coceral_id=#{ coceralId }
+        </if>
+        group by b.id,b.name
+    </select>
+    <select id="growthStatements" resultType="java.util.Map">
+        select coc.name,
+        (select count(u.id) from lp_user u where coc.id=u.coceral_id and date_format(u.create_time,'%Y-%m-%d')&lt;=#{startDate}
+        <if test="userType != null and userType != ''">
+            and u.user_type=#{ userType }
+        </if>
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+        ) startCount,
+        (select count(u.id) from lp_user u where coc.id=u.coceral_id and date_format(u.create_time,'%Y-%m-%d')&lt;=#{endDate}
+        <if test="userType != null and userType != ''">
+            and u.user_type=#{ userType }
+        </if>
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+          ) endCount,
+        (select count(u.id) from lp_user u where coc.id=u.coceral_id and (date_format(u.create_time,'%Y-%m-%d') between #{startDate} and #{endDate})
+        <if test="userType != null and userType != ''">
+            and u.user_type=#{ userType }
+        </if>
+        <if test="coceralId != null and coceralId != ''">
+            AND u.coceral_id=#{ coceralId }
+        </if>
+        ) count
+        from lp_chamber_of_commerce coc
+
+    </select>
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.lp.entity.LpUserEntity" id="lpUserMap">
+            <result property="id" column="id"/>
+            <result property="remarks" column="remarks"/>
+            <result property="versionNo" column="version_no"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="deleteFlag" column="delete_flag"/>
+            <result property="sort" column="sort"/>
+            <result property="userName" column="user_name"/>
+            <result property="name" column="name"/>
+            <result property="grade" column="grade"/>
+            <result property="state" column="state"/>
+    </resultMap>
+
+
+
+</mapper>

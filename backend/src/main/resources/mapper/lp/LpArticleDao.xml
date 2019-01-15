@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.lp.dao.LpArticleDao">
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        id,        remarks,        version_no,        create_by,        create_time,        update_by,        update_time,        delete_flag,        sort,        title,        type,        state,        column_id,        source,        author,        center,        pageview    </sql>
+    <!--基本过滤条件-->
+    <sql id="filterColumns">
+            <if test="id != null and id != ''">
+                AND id=#{ id }
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks=#{ remarks }
+            </if>
+            <if test="versionNo != null and versionNo != ''">
+                AND version_no=#{ versionNo }
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{ createBy }
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND create_time=#{ createTime }
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by=#{ updateBy }
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                AND update_time=#{ updateTime }
+            </if>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                AND delete_flag=#{ deleteFlag }
+            </if>
+            <if test="sort != null and sort != ''">
+                AND sort=#{ sort }
+            </if>
+            <if test="title != null and title != ''">
+                AND title=#{ title }
+            </if>
+            <if test="type != null and type != ''">
+                AND type=#{ type }
+            </if>
+            <if test="state != null and state != ''">
+                AND state=#{ state }
+            </if>
+            <if test="columnId != null and columnId != ''">
+                AND column_id=#{ columnId }
+            </if>
+            <if test="source != null and source != ''">
+                AND source=#{ source }
+            </if>
+            <if test="author != null and author != ''">
+                AND author=#{ author }
+            </if>
+            <if test="center != null and center != ''">
+                AND center=#{ center }
+            </if>
+            <if test="pageview != null and pageview != ''">
+                AND pageview=#{ pageview }
+            </if>
+    </sql>
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.lp.entity.LpArticleEntity" id="lpArticleMap">
+            <result property="id" column="id"/>
+            <result property="remarks" column="remarks"/>
+            <result property="versionNo" column="version_no"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="deleteFlag" column="delete_flag"/>
+            <result property="sort" column="sort"/>
+            <result property="title" column="title"/>
+            <result property="type" column="type"/>
+            <result property="state" column="state"/>
+            <result property="columnId" column="column_id"/>
+            <result property="source" column="source"/>
+            <result property="author" column="author"/>
+            <result property="center" column="center"/>
+            <result property="pageview" column="pageview"/>
+    </resultMap>
+
+    <!--菜单文章数据结果集-->
+    <resultMap id="searchHomeArticlesVO"  type="com.szt.modules.lp.entity.LpColumnEntity" >
+        <id property="id" column="c_id"/>
+        <result property="remarks" column="c_remarks"/>
+        <result property="versionNo" column="c_version_no"/>
+        <result property="createBy" column="c_create_by"/>
+        <result property="createTime" column="c_create_time"/>
+        <result property="updateBy" column="c_update_by"/>
+        <result property="updateTime" column="c_update_time"/>
+        <result property="deleteFlag" column="c_delete_flag"/>
+        <result property="sort" column="c_sort"/>
+        <result property="name" column="c_name"/>
+        <result property="parentId" column="c_parent_id"/>
+        <result property="parentName" column="c_parent_name"/>
+        <result property="level" column="c_level"/>
+        <collection property="list" ofType="com.szt.modules.lp.entity.LpArticleEntity">
+            <id property="id" column="a_id"/>
+            <result property="remarks" column="a_remarks"/>
+            <result property="versionNo" column="a_version_no"/>
+            <result property="createBy" column="a_create_by"/>
+            <result property="createTime" column="a_create_time"/>
+            <result property="updateBy" column="a_update_by"/>
+            <result property="updateTime" column="a_update_time"/>
+            <result property="deleteFlag" column="a_delete_flag"/>
+            <result property="sort" column="a_sort"/>
+            <result property="title" column="a_title"/>
+            <result property="type" column="a_type"/>
+            <result property="state" column="a_state"/>
+            <result property="columnId" column="a_column_id"/>
+            <result property="source" column="a_source"/>
+            <result property="author" column="a_author"/>
+            <result property="center" column="a_center"/>
+            <result property="pageview" column="a_pageview"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="searchHomeArticle" resultMap="searchHomeArticlesVO">
+        select a.column_id c_id,c.name c_name,a.id a_id,a.title a_title,a.create_time a_create_time,
+        (select lc.name from  lp_column lc where lc.id=c.parent_id) c_parent_name
+        from lp_article a
+        left join lp_column c on c.id=a.column_id
+        where 7&gt;(select count(1) from lp_article b where a.column_id=b.column_id and b.id &lt; a.id ) and c.is_recommend='0'
+        order by c.sort desc,a.create_time desc
+    </select>
+    <select id="dynamicNotification" resultMap="searchHomeArticlesVO">
+
+        select a.column_id c_id,c.name c_name,a.id a_id,a.title a_title,a.create_time a_create_time,
+         (select lc.name from  lp_column lc where lc.id=c.parent_id) c_parent_name
+         from lp_article a
+        left join lp_column c on c.id=a.column_id
+        where 3>(select count(1) from lp_article b where a.column_id=b.column_id and b.id &lt; a.id ) and  c.parent_id=10
+        order by c.sort desc,a.create_time desc
+    </select>
+
+</mapper>

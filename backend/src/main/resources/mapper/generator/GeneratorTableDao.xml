@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.generator.dao.GeneratorTableDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.generator.entity.GeneratorTableEntity" id="generatorTableMap">
+        <result property="id" column="id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="modulesId" column="modules_id"/>
+        <result property="versionNo" column="version_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="sort" column="sort"/>
+    </resultMap>
+    <resultMap id="queryTableFieldVO" type="com.szt.modules.generator.entity.GeneratorTableEntity">
+        <id property="id" column="table_id"/>
+        <result property="remarks" column="remarks"/>
+        <result property="tableComment" column="table_comment"/>
+        <result property="modulesId" column="modules_id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="modulesName" column="modules_name"/>
+        <collection property="columns" ofType="com.szt.modules.generator.entity.GeneratorTableFieldEntity">
+            <id property="id" column="field_id"/>
+            <result property="fieldName" column="field_name"/>
+            <result property="fieldType" column="field_type"/>
+            <result property="isNull" column="is_null"/>
+            <result property="isSeek" column="is_seek"/>
+            <result property="checkout" column="checkout"/>
+            <result property="isExport" column="is_export"/>
+            <result property="pageComment" column="page_comment"/>
+            <result property="comment" column="comment"/>
+            <result property="tableSet" column="table_set"/>
+            <result property="isDataBase" column="is_data_base"/>
+            <result property="isSet" column="is_set"/>
+            <result property="inputType" column="input_type"/>
+             <result property="dataDefault" column="data_default"/>
+            <result property="columnKey" column="column_key"/>
+        </collection>
+    </resultMap>
+    <update id="createTable" parameterType="map">
+        CREATE TABLE `${tableName}` (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+          `remarks` text COMMENT '备注',
+          `version_no` int(5) NOT NULL COMMENT '版本号',
+          `create_by` bigint(20) DEFAULT NULL COMMENT '创建人id',
+          `create_time` datetime NOT NULL COMMENT '创建时间',
+          `update_by` bigint(20) DEFAULT NULL COMMENT '修改人id',
+          `update_time` datetime NOT NULL COMMENT '修改时间',
+          `delete_flag` varchar(6) NOT NULL COMMENT '逻辑删除@0-存在,1-隐藏,2-删除,3-停用',
+          `sort` int(6) NOT NULL COMMENT '排序',
+          PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB AUTO_INCREMENT=488 DEFAULT CHARSET=utf8 COMMENT='${tableComment}'
+    </update>
+    <select id="lpUserTable0" resultMap="queryTableFilePreviewVOMap">
+select  tab.id,
+        tab.table_comment,
+        tab.table_name,
+        tab.business_value,
+        tab.business_key,
+        tab.level_key,
+        tab.parent_key,
+        tab.tree_key,
+        tab.tree_field_name,
+         f.id field_id,
+        f.is_update,
+         f.field_name,
+        f.is_seek,
+         f.data_length,
+        f.width_length,
+        f.dictionary_index,
+        f.checkout,
+        f.is_export,
+         f.page_comment,
+        f.comment,
+        f.table_set,
+       f.is_data_base,
+     f.is_set,
+        f.input_type,
+        f.data_default,
+        f.sort from generator_table tab
+          left join generator_table_field f on f.table_id=tab.id
+         where tab.table_name = #{tabName} and f.field_name in(
+				'id','coceral_id','user_name','name','sex','grade','politics_status','education','contact_phone','create_time','state','password',
+        'date_of_birth','ethnic','papers_type','papers_number','head_portrait',
+				'native_place','birthplace','former_name','politics_status','group_postal_address','special_plane','postcode','e_mail','qq','wx','initiation_time','enterprise_position',
+'fbcci_job','npc_job',
+        'public_positions','functions_ofcppcc','other_duties','personal_honor'
+	)
+        order by f.sort,f.id
+    </select>
+    <delete id="deleteTable" parameterType="map">
+        drop table `${tabName}`
+    </delete>
+    <select id="queryTableFieldVO" resultMap="queryTableFieldVO">
+            select
+            tab.id table_id,
+            tab.remarks,
+            tab.table_comment,
+            tab.modules_id,
+            tab.table_name,
+            (select m.`name` from generator_modules m where m.id=tab.modules_id) modules_name,
+            f.id field_id,
+            f.field_name,
+           ( select  conf_name from generator_bus_config c where c.conf_code='generator_table_field_field_type' and conf_vue= f.field_type) field_type,
+            f.is_null,
+            f.is_seek,
+            f.checkout,
+            f.is_export,
+            f.page_comment,
+            f.comment,
+            f.table_set,
+            f.is_data_base,
+            f.is_set,
+            f.input_type,
+            f.data_default,
+            f.column_key
+             from generator_table tab
+            left join generator_table_field f on tab.id=f.table_id and f.delete_flag='0'
+            where tab.delete_flag='0'
+            <foreach collection="list" open="  and  tab.id in (" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+    </select>
+    <select id="selectPageList" parameterType="map" resultType="com.szt.modules.generator.entity.GeneratorTableEntity">
+        select id,
+        table_name,
+        modules_id,
+        (select m.`name` from generator_modules m  where m.id=modules_id)modules_name,
+        table_comment,version_no,create_by,create_time,update_by,update_time,delete_flag,sort
+         from generator_table
+    </select>
+    <resultMap id="queryTableFilePreviewVOMap" type="com.szt.modules.generator.entity.GeneratorTableEntity">
+        <id column="id" property="id"></id>
+        <result column="table_name" property="tableName"></result>
+        <result column="modules_id" property="modulesId"></result>
+        <result column="table_comment" property="tableComment"></result>
+        <result column="tab_remarks" property="remarks"></result>
+        <result column="modules_name" property="modulesName"></result>
+        <result column="level_key" property="levelKey"></result>
+        <result column="parent_key" property="parentKey"></result>
+        <result column="tree_key" property="treeKey"></result>
+        <result column="tree_field_name" property="treeFieldName"></result>
+        <collection property="columns" ofType="com.szt.modules.generator.entity.GeneratorTableFieldEntity">
+            <id column="f_id" property="id"></id>
+            <result column="table_id" property="tableId"></result>
+            <result column="field_name" property="fieldName"></result>
+            <result column="field_type" property="fieldType"></result>
+            <result column="is_null" property="isNull"></result>
+            <result column="is_seek" property="isSeek"></result>
+            <result column="is_seek" property="isSeek"></result>
+            <result column="checkout" property="checkout"></result>
+            <result column="dictionary_index" property="dictionaryIndex"></result>
+            <result column="page_comment" property="pageComment"></result>
+            <result column="comment" property="comment"></result>
+            <result column="table_set" property="tableSet"></result>
+            <result column="is_data_base" property="isDataBase"></result>
+            <result column="is_set" property="isSet"></result>
+            <result column="input_type" property="inputType"></result>
+            <result column="delete_flag" property="deleteFlag"></result>
+            <result column="data_default" property="dataDefault"></result>
+            <result column="remarks" property="remarks"></result>
+           <result column="column_key" property="columnKey"></result>
+           <result column="is_update" property="isUpdate"></result>
+            <!--  <result column="tree_key" property="treeKey"></result>
+             <result column="parent_key" property="parentKey"></result>
+             <result column="level_key" property="levelKey"></result>-->
+        </collection>
+    </resultMap>
+
+    <select id="queryTableFilePreviewVO" resultMap="queryTableFilePreviewVOMap" >
+        SELECT
+        tab.id,
+        tab.table_name,
+        (select m.`name` from generator_modules m where m.id=tab.modules_id) modules_name,
+        tab.modules_id,
+        tab.table_comment,
+        tab.remarks tab_remarks,
+        tab.level_key,
+        tab.parent_key,
+        tab.tree_key,
+        tab.tree_field_name,
+        field.id f_id,
+        field.dictionary_index,
+        field.table_id,
+        field.field_name,
+        ( select  conf_name from generator_bus_config c where c.conf_code='generator_table_field_field_type' and conf_vue= field.field_type) field_type,
+        field.is_null,
+        field.is_seek,
+        field.checkout,
+        field.is_export,
+        field.`page_comment`,
+        field.`comment`,
+        field.table_set,
+        field.is_data_base,
+        field.is_set,
+        field.input_type,
+        field.delete_flag,
+        field.data_default,
+        field.remarks,
+        field.column_key
+--         field.tree_key,
+--         field.parent_key,
+--         field.level_key
+        FROM
+        generator_table tab
+        LEFT JOIN generator_table_field field ON field.table_id = tab.id
+        <where>
+            <if test="array!=null">
+            <foreach collection="array" open=" tab.table_name in (" close=")" item="item" separator=",">
+                #{item}
+            </foreach>
+            </if>
+        </where>
+        order by field.sort
+    </select>
+
+    <select id="queryTabeConfig" resultMap="queryTableFilePreviewVOMap">
+        select * from(SELECT
+        concat((select name from generator_modules mo where mo.id=tab.modules_id),REPLACE(tab.table_name,'_','')) module_tab_name,
+        tab.id,
+      --  tab.modules_id,
+        tab.table_comment,
+        tab.table_name,
+        tab.business_value,
+        tab.business_key,
+        tab.level_key,
+        tab.parent_key,
+        tab.tree_key,
+        tab.tree_field_name,
+        f.id field_id,
+        f.is_update,
+        f.field_name,
+        f.is_seek,
+        f.data_length,
+        f.width_length,
+        f.dictionary_index,
+        f.checkout,
+        f.is_export,
+        f.page_comment,
+        f.comment,
+        f.table_set,
+        f.is_data_base,
+        f.is_set,
+        f.input_type,
+        f.data_default,
+        f.sort
+          FROM
+        `generator_table` tab
+        left join generator_table_field f on f.table_id=tab.id
+        order by sort,f.id
+        ) tabs where tabs.module_tab_name = #{module}
+        order by sort,field_id
+    </select>
+    <select id="selectTableConfig" resultMap="queryTableFilePreviewVOMap">
+         select  tab.id,
+        tab.table_comment,
+        tab.table_name,
+        tab.business_value,
+        tab.business_key,
+        tab.level_key,
+        tab.parent_key,
+        tab.tree_key,
+        tab.tree_field_name,
+         f.id field_id,
+        f.is_update,
+         f.field_name,
+        f.is_seek,
+         f.data_length,
+        f.width_length,
+        f.dictionary_index,
+        f.checkout,
+        f.is_export,
+         f.page_comment,
+        f.comment,
+        f.table_set,
+       f.is_data_base,
+     f.is_set,
+        f.input_type,
+        f.data_default,
+        f.sort from generator_table tab
+         left join generator_table_field f on f.table_id=tab.id
+         where tab.table_name = #{tabName}
+        order by f.sort,f.id
+    </select>
+
+
+</mapper>

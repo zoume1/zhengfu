@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.generator.dao.GeneratorBusConfigDao">
+
+    <resultMap id="querySysBusConfigListMap" type="com.szt.modules.sys.vo.QuerySysBusConfigListVO">
+        <id column="conf_code"  property="confCode"></id>
+        <collection property="list" ofType="com.szt.modules.generator.entity.GeneratorBusConfigEntity">
+            <id column="id"  property="id"></id>
+            <result column="conf_name"  property="confName"></result>
+            <result column="conf_vue"  property="confVue"></result>
+        </collection>
+    </resultMap>
+
+    <resultMap id="queryAppSysBusConfigListMap" type="com.szt.modules.sys.vo.QuerySysBusConfigListVO">
+        <id column="conf_code"  property="confCode"></id>
+        <collection property="list" ofType="com.szt.modules.generator.vo.BusConfigVO">
+            <result column="title"  property="title"></result>
+            <result column="value"  property="value"></result>
+        </collection>
+    </resultMap>
+    <select id="querySysBusConfigList" resultMap="querySysBusConfigListMap">
+        select id, conf_code ,conf_name,conf_vue from generator_bus_config
+        where delete_flag='0'
+        <if test="array!=null">
+            <foreach collection="array" open="and conf_code in (" close=")" item="item" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="queryAppSysBusConfigList" resultMap="queryAppSysBusConfigListMap">
+         select id, REPLACE(conf_code, '_', '') conf_code,conf_name title,conf_vue value from generator_bus_config
+        where delete_flag='0'
+    </select>
+    <select id="queryModuleBusConfig" resultMap="querySysBusConfigListMap">
+  select id, conf_code ,conf_name,conf_vue from generator_bus_config
+        where   conf_code in(select  dictionary_index from generator_table_field where table_id=(select id from (SELECT concat((select name from generator_modules mo where mo.id=modules_id),REPLACE(table_name,'_','')) name,id  FROM
+`generator_table` ) tab
+            where tab.name =#{module}))
+    </select>
+
+</mapper>

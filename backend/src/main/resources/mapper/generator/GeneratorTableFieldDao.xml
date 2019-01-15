@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.generator.dao.GeneratorTableFieldDao">
+
+
+    <update id="addField" parameterType="map">
+        alter table ${tabName} add ${fieldName} ${dataType}
+        <choose>
+            <when test="dataType == 'date' or dataType =='datetime'">
+
+            </when>
+            <otherwise>
+                (${dataLength})
+            </otherwise>
+        </choose>
+        comment '${comment}'
+        <if test="isNull == '1'">
+            not Null
+        </if>
+    </update>
+    <update id="deleteFields" parameterType="map">
+        alter table ${tableName} drop column ${fieldName}
+    </update>
+
+
+</mapper>

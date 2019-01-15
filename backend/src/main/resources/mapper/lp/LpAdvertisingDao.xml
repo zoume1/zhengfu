@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.lp.dao.LpAdvertisingDao">
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        id,        remarks,        version_no,        create_by,        create_time,        update_by,        update_time,        delete_flag,        sort,        pic,        type    </sql>
+    <!--基本过滤条件-->
+    <sql id="filterColumns">
+            <if test="id != null and id != ''">
+                AND id=#{ id }
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks=#{ remarks }
+            </if>
+            <if test="versionNo != null and versionNo != ''">
+                AND version_no=#{ versionNo }
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{ createBy }
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND create_time=#{ createTime }
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by=#{ updateBy }
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                AND update_time=#{ updateTime }
+            </if>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                AND delete_flag=#{ deleteFlag }
+            </if>
+            <if test="sort != null and sort != ''">
+                AND sort=#{ sort }
+            </if>
+            <if test="pic != null and pic != ''">
+                AND pic=#{ pic }
+            </if>
+            <if test="type != null and type != ''">
+                AND type=#{ type }
+            </if>
+    </sql>
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.lp.entity.LpAdvertisingEntity" id="lpAdvertisingMap">
+            <result property="id" column="id"/>
+            <result property="remarks" column="remarks"/>
+            <result property="versionNo" column="version_no"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="deleteFlag" column="delete_flag"/>
+            <result property="sort" column="sort"/>
+            <result property="pic" column="pic"/>
+            <result property="type" column="type"/>
+    </resultMap>
+
+
+
+</mapper>

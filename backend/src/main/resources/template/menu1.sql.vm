@@ -1,0 +1,5 @@
+INSERT INTO `sys_bus_config` (`conf_name`,`conf_code`,`conf_vue`,`version_no`,`create_by`,`create_time`,`update_by`,`update_time`,`delete_flag`,`sort`)
+VALUES
+#foreach ($list in $lists)
+	 ( '${list.MapValue}', '${list.key}','${list.MapKey}', 1, 1,now(), 1,now(), '0', 1),
+#end

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szt.modules.sys.dao.SysPbAreaDao">
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        delete_flag,        id,        areaname,        parentid,        lng,        lat,        level,        create_time,        remarks,        sort,        version_no,        create_by,        update_by,        update_time    </sql>
+    <!--基本过滤条件-->
+    <sql id="filterColumns">
+        <if test="deleteFlag != null and deleteFlag != ''">
+            AND delete_flag=#{ deleteFlag }
+        </if>
+        <if test="id != null and id != ''">
+            AND id=#{ id }
+        </if>
+        <if test="areaname != null and areaname != ''">
+            AND areaname=#{ areaname }
+        </if>
+        <if test="parentid != null and parentid != ''">
+            AND parentid=#{ parentid }
+        </if>
+        <if test="lng != null and lng != ''">
+            AND lng=#{ lng }
+        </if>
+        <if test="lat != null and lat != ''">
+            AND lat=#{ lat }
+        </if>
+        <if test="level != null and level != ''">
+            AND level=#{ level }
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND create_time=#{ createTime }
+        </if>
+        <if test="remarks != null and remarks != ''">
+            AND remarks=#{ remarks }
+        </if>
+        <if test="sort != null and sort != ''">
+            AND sort=#{ sort }
+        </if>
+        <if test="versionNo != null and versionNo != ''">
+            AND version_no=#{ versionNo }
+        </if>
+        <if test="createBy != null and createBy != ''">
+            AND create_by=#{ createBy }
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            AND update_by=#{ updateBy }
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            AND update_time=#{ updateTime }
+        </if>
+    </sql>
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.szt.modules.sys.entity.SysPbAreaEntity" id="sysPbAreaMap">
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="id" column="id"/>
+        <result property="areaname" column="areaname"/>
+        <result property="parentid" column="parentid"/>
+        <result property="lng" column="lng"/>
+        <result property="lat" column="lat"/>
+        <result property="level" column="level"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remarks" column="remarks"/>
+        <result property="sort" column="sort"/>
+        <result property="versionNo" column="version_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+<select id="queryList" resultType="com.szt.modules.sys.entity.SysPbAreaEntity">
+       select   <include refid="allColumns" />,(select count(1) from sys_pb_area a where a.parentid=spa1.id) is_next from sys_pb_area spa1
+       <where>
+           <include refid="filterColumns" />
+       </where>
+    </select>
+
+</mapper>
