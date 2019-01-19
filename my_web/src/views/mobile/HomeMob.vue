@@ -193,11 +193,14 @@
   }
 
   .homeNews li{
-    flex-basis: 25%;
-    text-align: center;
+        flex-basis: 25%;
     list-style: none;
     margin-top: 10px;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /* padding-left: 2.1rem; */
+    text-align: center;
   }
   
   .homeNews li img{
@@ -223,17 +226,24 @@
   }
 
   .homenewsList li {
-    list-style: none;
-    /*align-items: center;*/
+   list-style: none;
     border-bottom: 8px solid #f7f5f5;
-    padding: 15px 10px;
-  }
+    box-sizing: border-box;
 
+  }
+  .newsTxt{
+    width: 16rem;
+  }
   .homenewsList li a{
+  display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-around;
+    -ms-flex-pack: distribute;
+    justify-content: space-between;
     text-decoration: none;
-    color:#000;
+    color: #000;
+    padding: 0.3rem 2.1rem;
+
   }
 
   .homenewsList li img {
